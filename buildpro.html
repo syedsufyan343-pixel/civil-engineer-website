@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BuildPro Engineering | Civil Engineering & Construction Consultancy</title>
+<meta name="description" content="BuildPro Engineering – structural design, 3D modeling, project management, cost estimation and surveying. Get a free quote today." />
+
+<!-- Fonts & Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<style>
+/* =========================================================
+   1. DESIGN TOKENS & RESET
+   ========================================================= */
+:root {
+  --navy: #0A192F;
+  --navy-light: #112240;
+  --gold: #F59E0B;
+  --gold-dark: #D97706;
+  --slate: #F3F4F6;
+  --text: #334155;
+  --muted: #64748B;
+  --white: #ffffff;
+  --radius: 12px;
+  --shadow: 0 10px 30px rgba(10, 25, 47, 0.12);
+  --transition: 0.3s ease;
+  --header-h: 76px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--white);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; color: var(--navy); line-height: 1.2; }
+.container { width: min(1200px, 92%); margin-inline: auto; }
+section { padding: 90px 0; }
+
+/* Section headings */
+.section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+.eyebrow {
+  display: inline-block; color: var(--gold-dark); font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; font-size: .8rem; margin-bottom: 10px;
+}
+.section-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 14px; }
+.section-head p { color: var(--muted); }
+.section-head .bar { width: 64px; height: 4px; background: var(--gold); border-radius: 4px; margin: 18px auto 0; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+  padding: 14px 30px; border-radius: 8px; border: 2px solid transparent;
+  font: 600 .95rem 'Inter', sans-serif; transition: var(--transition);
+}
+.btn-primary { background: var(--gold); color: var(--navy); }
+.btn-primary:hover { background: var(--gold-dark); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,158,11,.35); }
+.btn-outline { border-color: #fff; color: #fff; background: transparent; }
+.btn-outline:hover { background: #fff; color: var(--navy); transform: translateY(-2px); }
+
+/* Scroll-reveal animation */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* =========================================================
+   2. HEADER & NAVIGATION
+   ========================================================= */
+.header {
+  position: fixed; inset: 0 0 auto 0; height: var(--header-h); z-index: 1000;
+  display: flex; align-items: center; transition: var(--transition);
+  background: rgba(10, 25, 47, 0.55); backdrop-filter: blur(8px);
+}
+.header.scrolled { background: var(--navy); box-shadow: 0 4px 20px rgba(0,0,0,.25); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.logo { display: flex; align-items: center; gap: 12px; color: #fff; }
+.logo-icon {
+  width: 42px; height: 42px; border-radius: 10px; background: var(--gold); color: var(--navy);
+  display: grid; place-items: center; font-size: 1.2rem;
+}
+.logo-text { font: 800 1.15rem 'Montserrat', sans-serif; line-height: 1.1; }
+.logo-text small { display: block; font: 500 .68rem 'Inter', sans-serif; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.nav-links { display: flex; align-items: center; gap: 30px; }
+.nav-links a:not(.btn) { color: #e2e8f0; font-weight: 500; font-size: .95rem; position: relative; padding: 6px 0; }
+.nav-links a:not(.btn)::after {
+  content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 0; background: var(--gold); transition: var(--transition);
+}
+.nav-links a:not(.btn):hover, .nav-links a.active { color: var(--gold); }
+.nav-links a:not(.btn):hover::after, .nav-links a.active::after { width: 100%; }
+.nav-links .btn { padding: 11px 22px; font-size: .88rem; }
+.menu-toggle { display: none; background: none; border: 0; color: #fff; font-size: 1.6rem; cursor: pointer; }
+
+/* =========================================================
+   3. HERO SLIDER
+   ========================================================= */
+.hero { position: relative; height: 100vh; min-height: 620px; padding: 0; background: var(--navy); color: #fff; overflow: hidden; }
+.slide {
+  position: absolute; inset: 0; opacity: 0; visibility: hidden;
+  background-size: cover; background-position: center;
+  transition: opacity 1.1s ease, visibility 1.1s;
+}
+.slide.active { opacity: 1; visibility: visible; }
+.slide::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(110deg, rgba(10,25,47,.92) 0%, rgba(10,25,47,.65) 55%, rgba(10,25,47,.35) 100%);
+}
+.slide.active { animation: kenburns 9s ease-out forwards; }
+@keyframes kenburns { from { background-size: 108%; } to { background-size: 100%; } }
+.slide-content {
+  position: relative; z-index: 2; height: 100%;
+  display: flex; flex-direction: column; justify-content: center; max-width: 760px;
+  padding-top: var(--header-h);
+}
+.slide-content .tag {
+  display: inline-flex; align-self: flex-start; gap: 8px; align-items: center;
+  background: rgba(245,158,11,.15); border: 1px solid var(--gold); color: var(--gold);
+  padding: 6px 16px; border-radius: 50px; font-size: .82rem; font-weight: 600; margin-bottom: 22px;
+}
+.slide-content h1 { color: #fff; font-size: clamp(2.2rem, 6vw, 4rem); margin-bottom: 20px; font-weight: 800; }
+.slide-content h1 span { color: var(--gold); }
+.slide-content p { font-size: clamp(1rem, 2vw, 1.2rem); color: #cbd5e1; margin-bottom: 34px; max-width: 600px; }
+.hero-btns { display: flex; flex-wrap: wrap; gap: 16px; }
+/* Re-trigger text animation when slide becomes active */
+.slide .slide-content > * { opacity: 0; transform: translateY(24px); }
+.slide.active .slide-content > * { animation: rise .8s ease forwards; }
+.slide.active .slide-content > *:nth-child(2) { animation-delay: .15s; }
+.slide.active .slide-content > *:nth-child(3) { animation-delay: .3s; }
+.slide.active .slide-content > *:nth-child(4) { animation-delay: .45s; }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.slider-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+  width: 52px; height: 52px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4);
+  background: rgba(10,25,47,.4); color: #fff; font-size: 1.1rem; cursor: pointer; transition: var(--transition);
+}
+.slider-arrow:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+.slider-arrow.prev { left: 24px; }
+.slider-arrow.next { right: 24px; }
+.slider-dots { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 5; }
+.slider-dots button {
+  width: 12px; height: 12px; border-radius: 50px; border: 0; background: rgba(255,255,255,.45); cursor: pointer; transition: var(--transition);
+}
+.slider-dots button.active { width: 34px; background: var(--gold); }
+
+/* =========================================================
+   4. ABOUT
+   ========================================================= */
+.about { background: var(--white); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.about-img { position: relative; }
+.about-img img { border-radius: var(--radius); box-shadow: var(--shadow); width: 100%; height: 480px; object-fit: cover; }
+.about-badge {
+  position: absolute; bottom: -24px; right: -16px; background: var(--gold); color: var(--navy);
+  padding: 22px 28px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center;
+}
+.about-badge strong { display: block; font: 800 2rem 'Montserrat', sans-serif; line-height: 1; }
+.about-badge span { font-size: .82rem; font-weight: 600; }
+.about-text h2 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin: 6px 0 18px; }
+.about-text p { margin-bottom: 16px; }
+.check-list { margin: 20px 0 8px; display: grid; gap: 10px; }
+.check-list li { display: flex; gap: 12px; align-items: flex-start; font-weight: 500; }
+.check-list i { color: var(--gold); margin-top: 6px; }
+
+.stats { margin-top: 80px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.stat {
+  background: var(--navy); color: #fff; text-align: center; padding: 34px 16px;
+  border-radius: var(--radius); border-bottom: 4px solid var(--gold); transition: var(--transition);
+}
+.stat:hover { transform: translateY(-6px); }
+.stat i { color: var(--gold); font-size: 1.8rem; margin-bottom: 12px; }
+.stat .num { display: block; font: 800 2.4rem 'Montserrat', sans-serif; }
+.stat p { color: #94a3b8; font-size: .92rem; }
+
+/* =========================================================
+   5. SERVICES
+   ========================================================= */
+.services { background: var(--slate); }
+.services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+.service-card {
+  background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  transition: var(--transition); display: flex; flex-direction: column;
+}
+.service-card:hover { transform: translateY(-10px); box-shadow: var(--shadow); }
+.service-card .thumb { height: 170px; overflow: hidden; }
+.service-card .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.service-card:hover .thumb img { transform: scale(1.1); }
+.service-body { padding: 0 24px 28px; position: relative; flex: 1; }
+.service-icon {
+  width: 62px; height: 62px; border-radius: 14px; background: var(--gold); color: var(--navy);
+  display: grid; place-items: center; font-size: 1.5rem; margin: -31px 0 18px; position: relative;
+  box-shadow: 0 6px 16px rgba(245,158,11,.4); transition: var(--transition);
+}
+.service-card:hover .service-icon { background: var(--navy); color: var(--gold); }
+.service-body h3 { font-size: 1.12rem; margin-bottom: 10px; }
+.service-body p { font-size: .93rem; color: var(--muted); margin-bottom: 14px; }
+.service-body a { color: var(--gold-dark); font-weight: 600; font-size: .9rem; }
+.service-body a i { transition: var(--transition); margin-left: 4px; }
+.service-body a:hover i { margin-left: 10px; }
+
+/* =========================================================
+   6. PROJECTS GALLERY
+   ========================================================= */
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 40px; }
+.filter-btn {
+  padding: 10px 24px; border-radius: 50px; border: 2px solid var(--slate); background: var(--slate);
+  font: 600 .88rem 'Inter', sans-serif; color: var(--navy); cursor: pointer; transition: var(--transition);
+}
+.filter-btn:hover, .filter-btn.active { background: var(--gold); border-color: var(--gold); }
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.project {
+  position: relative; border-radius: var(--radius); overflow: hidden; height: 300px; cursor: pointer;
+  background: var(--navy-light); transition: opacity .4s ease, transform .4s ease;
+}
+.project.hide { display: none; }
+.project.fade-in { animation: popIn .5s ease; }
+@keyframes popIn { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+.project img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+.project:hover img { transform: scale(1.12); }
+.project-overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+  background: linear-gradient(to top, rgba(10,25,47,.95) 5%, rgba(10,25,47,.1) 60%);
+  opacity: 0; transition: var(--transition); color: #fff;
+}
+.project:hover .project-overlay, .project:focus-within .project-overlay { opacity: 1; }
+.project-overlay .cat { color: var(--gold); font-size: .75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+.project-overlay h3 { color: #fff; font-size: 1.2rem; margin: 4px 0 6px; transform: translateY(14px); transition: var(--transition); }
+.project-overlay p { font-size: .88rem; color: #cbd5e1; transform: translateY(14px); transition: var(--transition) .05s; }
+.project:hover .project-overlay h3, .project:hover .project-overlay p { transform: none; }
+.project .zoom {
+  position: absolute; top: 18px; right: 18px; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--gold); color: var(--navy); display: grid; place-items: center; opacity: 0; transition: var(--transition);
+}
+.project:hover .zoom { opacity: 1; }
+@media (hover: none) { .project-overlay, .project .zoom { opacity: 1; } .project-overlay h3, .project-overlay p { transform: none; } }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(10,25,47,.94); z-index: 2000; display: none;
+  align-items: center; justify-content: center; padding: 24px; flex-direction: column; gap: 14px;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-height: 78vh; border-radius: 10px; }
+.lightbox p { color: #fff; font-weight: 600; text-align: center; }
+.lightbox button {
+  position: absolute; top: 22px; right: 26px; background: none; border: 0; color: #fff; font-size: 2rem; cursor: pointer;
+}
+
+/* =========================================================
+   7. TESTIMONIALS
+   ========================================================= */
+.testimonials { background: var(--navy); position: relative; }
+.testimonials .section-head h2 { color: #fff; }
+.testimonials .section-head p { color: #94a3b8; }
+.t-wrap { max-width: 820px; margin: 0 auto; position: relative; }
+.t-track { overflow: hidden; }
+.t-slides { display: flex; transition: transform .6s ease; }
+.t-card {
+  min-width: 100%; padding: 44px 40px; background: var(--navy-light); border-radius: var(--radius);
+  border-top: 4px solid var(--gold); text-align: center; color: #cbd5e1;
+}
+.t-card .quote { color: var(--gold); font-size: 2.2rem; margin-bottom: 14px; }
+.t-card blockquote { font-size: 1.08rem; font-style: italic; margin-bottom: 24px; }
+.t-stars { color: var(--gold); margin-bottom: 18px; letter-spacing: 3px; }
+.t-author { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.t-author img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); background: var(--slate); }
+.t-author h4 { color: #fff; font-size: 1rem; text-align: left; }
+.t-author span { font-size: .84rem; color: #94a3b8; display: block; text-align: left; }
+.t-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 28px; }
+.t-controls button.arrow {
+  width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: transparent;
+  color: var(--gold); cursor: pointer; transition: var(--transition);
+}
+.t-controls button.arrow:hover { background: var(--gold); color: var(--navy); }
+.t-dots { display: flex; gap: 8px; }
+.t-dots button { width: 10px; height: 10px; border-radius: 50%; border: 0; background: #475569; cursor: pointer; transition: var(--transition); }
+.t-dots button.active { background: var(--gold); transform: scale(1.3); }
+
+/* =========================================================
+   8. CONTACT
+   ========================================================= */
+.contact { background: var(--slate); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 40px; align-items: start; }
+.contact-info { display: grid; gap: 18px; }
+.info-card {
+  display: flex; gap: 18px; align-items: center; background: #fff; padding: 20px 24px;
+  border-radius: var(--radius); box-shadow: 0 4px 14px rgba(0,0,0,.05);
+}
+.info-card .ic {
+  flex: none; width: 52px; height: 52px; border-radius: 12px; background: var(--navy); color: var(--gold);
+  display: grid; place-items: center; font-size: 1.2rem;
+}
+.info-card h4 { font-size: 1rem; }
+.info-card p { font-size: .93rem; color: var(--muted); }
+.map-box {
+  height: 220px; border-radius: var(--radius); overflow: hidden; position: relative;
+  background: repeating-linear-gradient(45deg, #dbe3ee, #dbe3ee 12px, #e5ebf3 12px, #e5ebf3 24px);
+  display: grid; place-items: center; text-align: center; color: var(--navy); font-weight: 600; border: 2px dashed #94a3b8;
+}
+.map-box i { display: block; font-size: 2.2rem; color: var(--gold-dark); margin-bottom: 6px; }
+.map-box small { display: block; font-weight: 400; color: var(--muted); }
+
+.form-card { background: #fff; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow); }
+.form-card h3 { font-size: 1.5rem; margin-bottom: 6px; }
+.form-card > p { color: var(--muted); margin-bottom: 24px; font-size: .95rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: .85rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.field input, .field select, .field textarea {
+  width: 100%; padding: 13px 16px; border: 2px solid #e2e8f0; border-radius: 8px;
+  font: 400 .95rem 'Inter', sans-serif; color: var(--text); background: #f8fafc; transition: var(--transition);
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(245,158,11,.15); }
+.field textarea { resize: vertical; min-height: 120px; }
+.field .error { display: none; color: #dc2626; font-size: .8rem; margin-top: 4px; }
+.field.invalid input, .field.invalid textarea, .field.invalid select { border-color: #dc2626; }
+.field.invalid .error { display: block; }
+.form-card .btn { width: 100%; justify-content: center; }
+.form-status { display: none; margin-top: 16px; padding: 14px 18px; border-radius: 8px; background: #dcfce7; color: #166534; font-weight: 500; }
+.form-status.show { display: block; }
+
+/* =========================================================
+   9. FOOTER
+   ========================================================= */
+.footer { background: #06101f; color: #94a3b8; padding: 70px 0 0; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 40px; padding-bottom: 50px; }
+.footer h4 { color: #fff; font-size: 1.05rem; margin-bottom: 20px; position: relative; padding-bottom: 10px; }
+.footer h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 34px; height: 3px; background: var(--gold); }
+.footer p { font-size: .93rem; margin: 16px 0; }
+.footer li { margin-bottom: 10px; font-size: .93rem; }
+.footer li a:hover { color: var(--gold); padding-left: 4px; }
+.footer li a { transition: var(--transition); }
+.footer li i { color: var(--gold); margin-right: 8px; width: 16px; }
+.socials { display: flex; gap: 10px; }
+.socials a {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--navy-light); color: #fff;
+  display: grid; place-items: center; transition: var(--transition);
+}
+.socials a:hover { background: var(--gold); color: var(--navy); transform: translateY(-4px); }
+.copyright { border-top: 1px solid #1e293b; padding: 22px 0; text-align: center; font-size: .88rem; }
+
+/* Back to top */
+.to-top {
+  position: fixed; right: 22px; bottom: 22px; width: 48px; height: 48px; border-radius: 50%; border: 0;
+  background: var(--gold); color: var(--navy); font-size: 1.1rem; cursor: pointer; z-index: 900;
+  opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition); box-shadow: var(--shadow);
+}
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+
+/* =========================================================
+   10. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+  .menu-toggle { display: block; }
+  .nav-links {
+    position: fixed; top: var(--header-h); right: 0; width: min(320px, 85%); height: calc(100vh - var(--header-h));
+    background: var(--navy); flex-direction: column; align-items: flex-start; gap: 0; padding: 24px;
+    transform: translateX(100%); transition: transform .4s ease; box-shadow: -10px 0 30px rgba(0,0,0,.3);
+  }
+  .nav-links.open { transform: none; }
+  .nav-links li { width: 100%; border-bottom: 1px solid #1e293b; }
+  .nav-links a:not(.btn) { display: block; padding: 16px 0; }
+  .nav-links li:last-child { border: 0; margin-top: 20px; }
+  .nav-links .btn { width: 100%; justify-content: center; }
+  .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+  .about-img img { height: 360px; }
+  .about-badge { right: 12px; }
+  .slider-arrow { display: none; }
+}
+@media (max-width: 640px) {
+  section { padding: 64px 0; }
+  .services-grid, .projects-grid, .footer-grid, .form-row { grid-template-columns: 1fr; }
+  .stats { gap: 14px; }
+  .stat { padding: 26px 10px; }
+  .stat .num { font-size: 1.9rem; }
+  .form-card { padding: 28px 20px; }
+  .t-card { padding: 32px 22px; }
+  .project { height: 260px; }
+  .hero-btns .btn { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal, .slide .slide-content > * { opacity: 1; transform: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header" id="header">
+  <div class="container nav">
+    <a href="#home" class="logo" aria-label="BuildPro Engineering home">
+      <span class="logo-icon"><i class="fa-solid fa-helmet-safety"></i></span>
+      <span class="logo-text">BuildPro Engineering<small>Civil Engineer</small></span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="btn btn-primary">Get a Free Quote</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+<!-- ============ HERO SLIDER ============ -->
+<section class="hero" id="home" aria-roledescription="carousel" aria-label="Featured work">
+  <!-- Replace the image URLs below with your own project photos if desired -->
+  <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80')">
+    <div class="container slide-content">
+      <span class="tag"><i class="fa-solid fa-award"></i> Licensed Professional Civil Engineers</span>
+      <h1>Designing &amp; Building The Future with <span>Precision</span></h1>
+      <p>From concept to completion, we deliver structurally sound, cost-efficient and on-time civil engineering solutions.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-primary">Our Services <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="#contact" class="btn btn-outline">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1920&q=80')">
+    <div class="container slide-content">
+      <span class="tag"><i class="fa-solid fa-compass-drafting"></i> Design Excellence</span>
+      <h1>Engineering Blueprints That Become <span>Landmarks</span></h1>
+      <p>Advanced structural analysis and detailed drawings that turn ambitious ideas into safe, buildable reality.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-primary">Our Services <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="#contact" class="btn btn-outline">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80')">
+    <div class="container slide-content">
+      <span class="tag"><i class="fa-solid fa-building"></i> Proven Track Record</span>
+      <h1>Quality Construction. <span>Delivered</span> On Time.</h1>
+      <p>Hands-on site supervision and rigorous quality control on residential, commercial and infrastructure projects.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-primary">Our Services <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="#contact" class="btn btn-outline">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+  <button class="slider-arrow prev" id="heroPrev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+  <button class="slider-arrow next" id="heroNext" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+  <div class="slider-dots" id="heroDots"></div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img reveal">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80" alt="Engineers reviewing plans on a construction site" loading="lazy" />
+        <div class="about-badge"><strong>10+</strong><span>Years of Excellence</span></div>
+      </div>
+      <div class="about-text reveal">
+        <span class="eyebrow">About Us</span>
+        <h2>Building Trust Through Engineering Excellence</h2>
+        <p>BuildPro Engineering is a full-service civil engineering and construction consultancy led by a licensed Professional Engineer. We combine rigorous technical analysis with practical, on-site experience to deliver projects that are safe, durable and economical.</p>
+        <p>Whether you are building a family home, a commercial complex or public infrastructure, our team guides you through every stage – design, approvals, estimation, construction and handover – with complete transparency.</p>
+        <ul class="check-list">
+          <li><i class="fa-solid fa-circle-check"></i> Licensed &amp; fully insured professionals</li>
+          <li><i class="fa-solid fa-circle-check"></i> Code-compliant, value-engineered designs</li>
+          <li><i class="fa-solid fa-circle-check"></i> Transparent pricing &amp; reliable timelines</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Animated counters -->
+    <div class="stats">
+      <div class="stat reveal"><i class="fa-solid fa-diagram-project"></i><span class="num" data-target="150" data-suffix="+">0</span><p>Projects Completed</p></div>
+      <div class="stat reveal"><i class="fa-solid fa-hourglass-half"></i><span class="num" data-target="10" data-suffix="+">0</span><p>Years Experience</p></div>
+      <div class="stat reveal"><i class="fa-solid fa-face-smile"></i><span class="num" data-target="100" data-suffix="%">0</span><p>Client Satisfaction</p></div>
+      <div class="stat reveal"><i class="fa-solid fa-users-gear"></i><span class="num" data-target="25" data-suffix="+">0</span><p>Expert Team Members</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">What We Do</span>
+      <h2>Our Engineering Services</h2>
+      <p>Comprehensive solutions covering every phase of your construction project.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="services-grid">
+      <article class="service-card reveal">
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80" alt="Structural analysis" loading="lazy" /></div>
+        <div class="service-body">
+          <div class="service-icon"><i class="fa-solid fa-building-columns"></i></div>
+          <h3>Structural Design &amp; Analysis</h3>
+          <p>Safe, optimized RCC, steel and composite structures designed to international codes and verified with advanced software.</p>
+          <a href="#contact">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+
+      <article class="service-card reveal">
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=600&q=80" alt="Architectural modeling" loading="lazy" /></div>
+        <div class="service-body">
+          <div class="service-icon"><i class="fa-solid fa-cube"></i></div>
+          <h3>Architectural &amp; 3D Modeling</h3>
+          <p>Photorealistic 3D renders and BIM models that let you see and refine your project before breaking ground.</p>
+          <a href="#contact">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+
+      <article class="service-card reveal">
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1590496793929-36417d3117de?auto=format&fit=crop&w=600&q=80" alt="Site supervision" loading="lazy" /></div>
+        <div class="service-body">
+          <div class="service-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+          <h3>Project Management &amp; Site Supervision</h3>
+          <p>Day-to-day oversight of schedules, quality, safety and contractors so your project stays on track and on budget.</p>
+          <a href="#contact">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+
+      <article class="service-card reveal">
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=600&q=80" alt="Surveying and estimation" loading="lazy" /></div>
+        <div class="service-body">
+          <div class="service-icon"><i class="fa-solid fa-ruler-combined"></i></div>
+          <h3>Cost Estimation &amp; Surveying</h3>
+          <p>Accurate quantity take-offs, BOQs and land/topographic surveys that remove guesswork and budget surprises.</p>
+          <a href="#contact">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="projects" id="projects">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Our Portfolio</span>
+      <h2>Recent Projects</h2>
+      <p>A selection of structures we have designed, supervised and delivered.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="filters reveal" id="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="residential">Residential</button>
+      <button class="filter-btn" data-filter="commercial">Commercial</button>
+      <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
+    </div>
+
+    <div class="projects-grid" id="projectsGrid">
+      <figure class="project" data-category="commercial" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Corporate tower" loading="lazy" />
+        <span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+        <figcaption class="project-overlay"><span class="cat">Commercial</span><h3>Skyline Corporate Tower</h3><p>18-storey RCC office tower with basement parking.</p></figcaption>
+      </figure>
+      <figure class="project" data-category="infrastructure" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=800&q=80" alt="Bridge structure" loading="lazy" />
+        <span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+        <figcaption class="project-overlay"><span class="cat">Infrastructure</span><h3>Riverside Bridge Crossing</h3><p>240 m prestressed concrete girder bridge.</p></figcaption>
+      </figure>
+      <figure class="project" data-category="residential" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Modern villa" loading="lazy" />
+        <span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+        <figcaption class="project-overlay"><span class="cat">Residential</span><h3>Palm Heights Villas</h3><p>Luxury gated community of 24 earthquake-resistant villas.</p></figcaption>
+      </figure>
+      <figure class="project" data-category="infrastructure" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80" alt="Construction crane" loading="lazy" />
+        <span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+        <figcaption class="project-overlay"><span class="cat">Infrastructure</span><h3>Metro Flyover Expansion</h3><p>Urban flyover with integrated drainage and lighting.</p></figcaption>
+      </figure>
+      <figure class="project" data-category="commercial" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=800&q=80" alt="City mixed-use buildings" loading="lazy" />
+        <span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+        <figcaption class="project-overlay"><span class="cat">Commercial</span><h3>Central Plaza Mall</h3><p>Mixed-use retail and business complex, 60,000 sq ft.</p></figcaption>
+      </figure>
+      <figure class="project" data-category="residential" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Contemporary home" loading="lazy" />
+        <span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+        <figcaption class="project-overlay"><span class="cat">Residential</span><h3>Maple Residence</h3><p>Custom 3-storey family home with sustainable design.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Testimonials</span>
+      <h2>What Our Clients Say</h2>
+      <p>Trusted by homeowners, developers and public agencies.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="t-wrap reveal">
+      <div class="t-track">
+        <div class="t-slides" id="tSlides">
+          <div class="t-card">
+            <i class="fa-solid fa-quote-left quote"></i>
+            <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <blockquote>"BuildPro handled our 18-storey tower from structural design to handover. The project finished ahead of schedule and under budget – their attention to detail is exceptional."</blockquote>
+            <div class="t-author">
+              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" alt="Client portrait" loading="lazy" />
+              <div><h4>Michael Anderson</h4><span>CEO, Skyline Developments</span></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <i class="fa-solid fa-quote-left quote"></i>
+            <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <blockquote>"From the 3D model to the final finishing, everything matched exactly what we imagined. Clear communication and honest cost estimates made the whole process stress-free."</blockquote>
+            <div class="t-author">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Client portrait" loading="lazy" />
+              <div><h4>Sarah Mitchell</h4><span>Homeowner, Maple Residence</span></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <i class="fa-solid fa-quote-left quote"></i>
+            <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <blockquote>"Their site supervision team caught issues early and kept our infrastructure project safe and compliant. A dependable partner we will definitely work with again."</blockquote>
+            <div class="t-author">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80" alt="Client portrait" loading="lazy" />
+              <div><h4>David Thompson</h4><span>Project Director, Metro Authority</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="t-controls">
+        <button class="arrow" id="tPrev" aria-label="Previous testimonial"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="t-dots" id="tDots"></div>
+        <button class="arrow" id="tNext" aria-label="Next testimonial"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Get In Touch</span>
+      <h2>Request Your Free Quote</h2>
+      <p>Tell us about your project and we will respond within 24 hours.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="info-card"><div class="ic"><i class="fa-solid fa-phone"></i></div><div><h4>Phone</h4><p>+1 (555) 123-4567</p></div></div>
+        <div class="info-card"><div class="ic"><i class="fa-solid fa-envelope"></i></div><div><h4>Email</h4><p>info@buildproengineering.com</p></div></div>
+        <div class="info-card"><div class="ic"><i class="fa-solid fa-location-dot"></i></div><div><h4>Office</h4><p>123 Engineering Avenue, Suite 400, Your City</p></div></div>
+        <div class="info-card"><div class="ic"><i class="fa-solid fa-clock"></i></div><div><h4>Working Hours</h4><p>Mon – Sat: 9:00 AM – 6:00 PM</p></div></div>
+        <!-- Map placeholder: swap with a Google Maps <iframe> embed -->
+        <div class="map-box"><div><i class="fa-solid fa-map-location-dot"></i>Location Map Placeholder<small>Embed your Google Maps iframe here</small></div></div>
+      </div>
+
+      <div class="form-card reveal">
+        <h3>Send Us A Message</h3>
+        <p>Fill in the form and our engineers will get back to you shortly.</p>
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="field"><label for="name">Full Name *</label><input type="text" id="name" name="name" placeholder="John Doe" required /><span class="error">Please enter your name.</span></div>
+            <div class="field"><label for="email">Email Address *</label><input type="email" id="email" name="email" placeholder="john@example.com" required /><span class="error">Please enter a valid email.</span></div>
+          </div>
+          <div class="field">
+            <label for="type">Project Type</label>
+            <select id="type" name="type">
+              <option>Structural Design &amp; Analysis</option>
+              <option>Architectural &amp; 3D Modeling</option>
+              <option>Project Management &amp; Supervision</option>
+              <option>Cost Estimation &amp; Surveying</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label for="details">Project Details *</label><input type="text" id="details" name="details" placeholder="e.g. 3-storey house, 2,400 sq ft, Lahore" required /><span class="error">Please describe your project briefly.</span></div>
+          <div class="field"><label for="message">Message *</label><textarea id="message" name="message" placeholder="Tell us more about your requirements, timeline and budget..." required></textarea><span class="error">Please enter a message.</span></div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Inquiry</button>
+          <div class="form-status" id="formStatus" role="status"><i class="fa-solid fa-circle-check"></i> Thank you! Your inquiry has been received. We'll contact you within 24 hours.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#home" class="logo"><span class="logo-icon"><i class="fa-solid fa-helmet-safety"></i></span><span class="logo-text">BuildPro Engineering<small>Civil Engineer</small></span></a>
+        <p>Professional civil engineering and construction consultancy delivering safe, efficient and enduring structures.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li><li><a href="#about">About Us</a></li><li><a href="#services">Services</a></li>
+          <li><a href="#projects">Projects</a></li><li><a href="#testimonials">Testimonials</a></li><li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Structural Design</a></li><li><a href="#services">3D Modeling</a></li>
+          <li><a href="#services">Site Supervision</a></li><li><a href="#services">Cost Estimation</a></li><li><a href="#services">Land Surveying</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><i class="fa-solid fa-location-dot"></i>123 Engineering Ave, Your City</li>
+          <li><i class="fa-solid fa-phone"></i>+1 (555) 123-4567</li>
+          <li><i class="fa-solid fa-envelope"></i>info@buildproengineering.com</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">&copy; <span id="year"></span> BuildPro Engineering. All rights reserved.</div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog">
+  <button id="lbClose" aria-label="Close image">&times;</button>
+  <img id="lbImg" src="" alt="" />
+  <p id="lbCap"></p>
+</div>
+
+<script>
+/* =========================================================
+   JAVASCRIPT – all vanilla, no dependencies
+   ========================================================= */
+(() => {
+  'use strict';
+  const $  = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+  /* ---------- Header: scrolled state, mobile menu, active link ---------- */
+  const header = $('#header'), navLinks = $('#navLinks'), menuToggle = $('#menuToggle'), toTop = $('#toTop');
+
+  const toggleMenu = (open) => {
+    navLinks.classList.toggle('open', open);
+    menuToggle.setAttribute('aria-expanded', open);
+    menuToggle.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  };
+  menuToggle.addEventListener('click', () => toggleMenu(!navLinks.classList.contains('open')));
+  $$('a', navLinks).forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+  const sections = $$('main section[id]');
+  const links = $$('a:not(.btn)', navLinks);
+  const onScroll = () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+    toTop.classList.toggle('show', window.scrollY > 600);
+    // Highlight the nav link of the section currently in view
+    let current = 'home';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  /* ---------- Generic slider factory (used by hero) ---------- */
+  const slides = $$('.hero .slide');
+  const dotsWrap = $('#heroDots');
+  let heroIndex = 0, heroTimer;
+
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    b.addEventListener('click', () => { goHero(i); restartHero(); });
+    dotsWrap.appendChild(b);
+  });
+  const heroDots = $$('button', dotsWrap);
+
+  function goHero(i) {
+    heroIndex = (i + slides.length) % slides.length;
+    slides.forEach((s, n) => s.classList.toggle('active', n === heroIndex));
+    heroDots.forEach((d, n) => d.classList.toggle('active', n === heroIndex));
+  }
+  const startHero   = () => { heroTimer = setInterval(() => goHero(heroIndex + 1), 6000); };
+  const restartHero = () => { clearInterval(heroTimer); startHero(); };
+
+  $('#heroNext').addEventListener('click', () => { goHero(heroIndex + 1); restartHero(); });
+  $('#heroPrev').addEventListener('click', () => { goHero(heroIndex - 1); restartHero(); });
+
+  const hero = $('.hero');
+  hero.addEventListener('mouseenter', () => clearInterval(heroTimer));  // pause on hover
+  hero.addEventListener('mouseleave', restartHero);
+  // Touch swipe support
+  let touchX = 0;
+  hero.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  hero.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) { goHero(heroIndex + (dx < 0 ? 1 : -1)); restartHero(); }
+  });
+  // Keyboard arrows
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && window.scrollY < window.innerHeight) { goHero(heroIndex + 1); restartHero(); }
+    if (e.key === 'ArrowLeft'  && window.scrollY < window.innerHeight) { goHero(heroIndex - 1); restartHero(); }
+  });
+  goHero(0); startHero();
+
+  /* ---------- Scroll reveal + animated counters ---------- */
+  const animateCount = (el) => {
+    const target = +el.dataset.target, suffix = el.dataset.suffix || '', dur = 1800, t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min((now - t0) / dur, 1);
+      el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target) + suffix; // ease-out
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add('visible');
+      const num = $('.num', en.target);
+      if (num && !num.dataset.done) { num.dataset.done = 1; animateCount(num); }
+      io.unobserve(en.target);
+    });
+  }, { threshold: 0.15 });
+  $$('.reveal').forEach(el => io.observe(el));
+
+  /* ---------- Project filter ---------- */
+  const filterBtns = $$('.filter-btn'), projects = $$('.project');
+  filterBtns.forEach(btn => btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    projects.forEach(p => {
+      const show = f === 'all' || p.dataset.category === f;
+      p.classList.toggle('hide', !show);
+      if (show) { p.classList.remove('fade-in'); void p.offsetWidth; p.classList.add('fade-in'); }
+    });
+  }));
+
+  /* ---------- Lightbox ---------- */
+  const lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCap');
+  const openLb = (p) => {
+    const img = $('img', p);
+    lbImg.src = img.src.replace(/w=\d+/, 'w=1400'); lbImg.alt = img.alt;
+    lbCap.textContent = $('h3', p).textContent;
+    lb.classList.add('open');
+  };
+  projects.forEach(p => {
+    p.addEventListener('click', () => openLb(p));
+    p.addEventListener('keydown', e => { if (e.key === 'Enter') openLb(p); });
+  });
+  const closeLb = () => lb.classList.remove('open');
+  $('#lbClose').addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+  /* ---------- Testimonials slider ---------- */
+  const tSlides = $('#tSlides'), tCount = $$('.t-card').length, tDotsWrap = $('#tDots');
+  let tIndex = 0, tTimer;
+  for (let i = 0; i < tCount; i++) {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', 'Testimonial ' + (i + 1));
+    b.addEventListener('click', () => { goT(i); restartT(); });
+    tDotsWrap.appendChild(b);
+  }
+  const tDots = $$('button', tDotsWrap);
+  function goT(i) {
+    tIndex = (i + tCount) % tCount;
+    tSlides.style.transform = `translateX(-${tIndex * 100}%)`;
+    tDots.forEach((d, n) => d.classList.toggle('active', n === tIndex));
+  }
+  const restartT = () => { clearInterval(tTimer); tTimer = setInterval(() => goT(tIndex + 1), 7000); };
+  $('#tNext').addEventListener('click', () => { goT(tIndex + 1); restartT(); });
+  $('#tPrev').addEventListener('click', () => { goT(tIndex - 1); restartT(); });
+  goT(0); restartT();
+
+  /* ---------- Contact form: validation + demo submit ---------- */
+  const form = $('#contactForm'), status = $('#formStatus');
+  const validators = {
+    name:    v => v.trim().length >= 2,
+    email:   v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+    details: v => v.trim().length >= 3,
+    message: v => v.trim().length >= 10
+  };
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let ok = true;
+    Object.keys(validators).forEach(id => {
+      const input = form.elements[id], valid = validators[id](input.value);
+      input.closest('.field').classList.toggle('invalid', !valid);
+      if (!valid) ok = false;
+    });
+    if (!ok) return;
+    /* TODO: connect to a backend / service (Formspree, EmailJS, Netlify Forms, your API):
+       fetch('YOUR_ENDPOINT', { method: 'POST', body: new FormData(form) }) */
+    status.classList.add('show');
+    form.reset();
+    setTimeout(() => status.classList.remove('show'), 6000);
+  });
+  $$('input, textarea', form).forEach(el => el.addEventListener('input', () => el.closest('.field').classList.remove('invalid')));
+
+  /* ---------- Image fallback: if an image fails, show a neutral navy block ---------- */
+  $$('img').forEach(img => img.addEventListener('error', () => {
+    img.style.visibility = 'hidden';
+    if (img.parentElement) img.parentElement.style.background = 'linear-gradient(135deg,#0A192F,#112240)';
+  }));
+
+  /* ---------- Footer year ---------- */
+  $('#year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
